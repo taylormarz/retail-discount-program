@@ -32,13 +32,6 @@ def create_employee():
         print("|   Error! Employee name must be alphanumeric.")
 
     # employee_type creation + validation
-    while employee_type not in ["Hourly", "Manager"]:
-        employee_type = (input("|   Enter Employee Type (Hourly/Manager): "))
-        print("|   Error! Employee Type must be Hourly or Manager.")
-        if employee_type == "Hourly" or employee_type == "Manager":
-            break
-
-    # employee_type creation + validation
     employee_type = (input("|   Enter Employee Type (Hourly/Manager): "))
     while employee_type.lower() not in ["hourly", "manager"]:
         print("|   Error! Employee Type must be Hourly or Manager.")
