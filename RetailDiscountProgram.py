@@ -23,13 +23,14 @@ def create_employee():
           "|   You are creating a new employee.   |\n"
           "----------------------------------------")
 
-    employee_information = []
-
     while True:
         try:
             employee_id = int(input("    Enter 4-Digit Employee ID: "))
             if len(str(employee_id)) == 4:
-                break
+                if not any(employee_id == employee[0] for employee in employee_data):
+                    break
+                else:
+                    print("    Error! Employee ID already in use.")
             else:
                 print("    Error! Employee ID must be 4-digit integer.")
         except ValueError:
@@ -70,11 +71,30 @@ def create_employee():
         except ValueError:
             print("    Error! Employee Discount must be an Integer.")
 
-    # Adding input for new employee to employee_information list
-    employee_information.append([employee_id, employee_name, employee_type, years_worked,
-                                 employee_purchases, total_discount, employee_discount])
-    employee_data.append(employee_information)
+    # Adding input for new employee to employee_data list
+    employee_data.append([employee_id, employee_name, employee_type, years_worked,
+                          employee_purchases, total_discount, employee_discount])
 
+    # INCLUDE OPTION TO ADD ANOTHER EMPLOYEE!!
+    add_another_employee = (input("    Would you like to add another employee? (Y/N): ")).lower()
+    if add_another_employee == "y":
+        create_employee()
+    elif add_another_employee == "n":
+        ask_about_menu = (input("    Would you like to go to main menu? (Y/N): ")).lower()
+        if ask_about_menu == "y":
+            print(menuDesign)
+            menu_options()
+        elif ask_about_menu == "n":
+            print("----------------------------------------\n"
+                  "|   You are exiting the program. Bye!  |\n"
+                  "----------------------------------------")
+            sys.exit()
+    while add_another_employee not in ["y", "n"]:
+        print("    Error! Please select either Y or N.")
+        add_another_employee = (input("    Would you like to add another employee? (Y/N): ")).lower()
+
+
+# Create an Item Function
 
 # Menu Selection Function
 def menu_options():
@@ -86,7 +106,11 @@ def menu_options():
             print("----------------------------------------\n"
                   "|   Printing Employees in System.      |\n"
                   "----------------------------------------")
-            print(employee_data)
+            if not employee_data:
+                print("    No Employees in System.")
+            else:
+                for employee_information in employee_data:
+                    print(employee_information)
         elif menu_selection == "5":
             print("----------------------------------------\n"
                   "|   You are exiting the program. Bye!  |\n"
