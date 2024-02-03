@@ -66,8 +66,11 @@ def create_employee():
     # employee_discount creation + validation
     while True:
         try:
-            employee_discount = int(input("    Enter Employee Discount: "))
-            break
+            employee_discount = int(input("    Enter Employee Discount Number: "))
+            if not any(employee_discount == employee[6] for employee in employee_data):
+                break
+            else:
+                print("    Error! Employee Discount Number already assigned.")
         except ValueError:
             print("    Error! Employee Discount must be an Integer.")
 
