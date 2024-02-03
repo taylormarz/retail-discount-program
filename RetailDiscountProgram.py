@@ -155,6 +155,12 @@ def create_item():
         add_another_item = (input("    Would you like to add another item? (Y/N): ")).lower()
 
 
+def make_purchase():
+    print("------------------------------------------------------------\n"
+          "|   You are making a purchase.                             |\n"
+          "------------------------------------------------------------")
+
+
 # Menu Selection Function
 def menu_options():
     while True:
@@ -163,15 +169,34 @@ def menu_options():
             create_employee()
         elif menu_selection == "2":
             create_item()
+        elif menu_selection == "3":
+            make_purchase()
+        # NOT FUNCTIONING HOW I WANT
         elif menu_selection == "4":
-            print("------------------------------------------------------------\n"
-                  "|   Printing Employees in System.                          |\n"
-                  "------------------------------------------------------------")
             if not employee_data:
-                print("    No employees in system.")
+                print("    No employees in the system.")
             else:
+                header = ("| Employee ID    | Employee Name   | Employee Type   | Years Worked    | Total Purchased "
+                          "| Total Discount  | Discount Number |")
+                print(header)
+                print("-" * len(header))  # Print a separator line
+
+                # Determine the maximum width for each column based on header length
+                max_lengths = [max(len(item.strip()) for item in column.split('|'))
+                               for column in header.split('|')[1:-1]]
+
                 for employee_information in employee_data:
-                    print(employee_information)
+                    formatted_data = (f"| {employee_information[0]:<{max_lengths[0]}} "
+                                      f"| {employee_information[1]:<{max_lengths[1]}} "
+                                      f"| {employee_information[2]:<{max_lengths[2]}} "
+                                      f"| {employee_information[3]:<{max_lengths[3]}} "
+                                      f"| {employee_information[4]:<{max_lengths[4]}} "
+                                      f"| {employee_information[5]:<{max_lengths[5]}} "
+                                      f"| {employee_information[6]:<{max_lengths[6]}} |")
+                    print(formatted_data)
+
+
+
         elif menu_selection == "5":
             print("------------------------------------------------------------\n"
                   "|   You are exiting the program. Bye!                      |\n"
