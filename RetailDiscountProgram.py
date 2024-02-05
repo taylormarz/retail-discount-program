@@ -155,10 +155,110 @@ def create_item():
         add_another_item = (input("    Would you like to add another item? (Y/N): ")).lower()
 
 
+# NOT FUNCTIONING HOW I WANT
+def employee_summary():
+    print(employee_data)
+
+
+def discount_percentage(years_worked, employee_type, total_discount):
+    while total_discount < 200:
+        if years_worked < 5:
+            discount = years_worked * 2
+            if employee_type == 'manager':
+                discount += 10
+            elif employee_type == 'hourly':
+                discount += 2
+            return discount
+        else:
+            discount = 10
+            if employee_type == 'manager':
+                discount += 10
+            elif employee_type == 'hourly':
+                discount += 2
+            return discount
+
+    discount = 0
+    return discount
+
+
 def make_purchase():
     print("------------------------------------------------------------\n"
           "|   You are making a purchase.                             |\n"
           "------------------------------------------------------------")
+    header = "| Item Number | Item Name | Item Cost "
+    print(header)
+    print(item_data)
+
+    employee = None;
+
+    while True:
+        try:
+            employee_discount = int(input("    Enter the employee discount number: "))
+            if any(employee_discount == employee[6] for employee in employee_data):
+                employee = next(employee for employee in employee_data if employee[6] == employee_discount)
+                break
+            else:
+                print("    Error! That discount number doesn't exist.")
+        except ValueError:
+            print("    Error! Employee discount number must be numeric.")
+
+    while True:
+        try:
+            item_number = int(input("    Enter item number you wish to purchase: "))
+            if any(item_number == item[0] for item in item_data):
+                break
+            else:
+                print("    Error! That item number doesn't exist.")
+        except ValueError:
+            print("    Error! Item number must be numeric.")
+
+    confirm_purchase = input("    Would you like to confirm this purchase? (Y/N): ").lower()
+    if confirm_purchase == "y":
+        _, _, employee_type, years_worked, _, total_discount, _ = employee
+        discount = discount_percentage(years_worked, employee_type, total_discount)
+
+        item_cost = 0
+        for item in item_data:
+            if item[0] == item_number:
+                item_cost = item[2]
+                break
+
+        cost_calc = item_cost * (discount / 100)
+        final_cost = item_cost - cost_calc
+        employee[5] += cost_calc
+
+        print(f"Item Cost: ${item_cost}")
+        print(f"Final Cost: ${round(final_cost, 2)}")
+        print(f"Total Discount for Employee: ${round(employee[5], 2)}")
+
+    elif confirm_purchase == "n":
+        new_purchase = input("    Would you like to make a new purchase? (Y/N): ").lower()
+        if new_purchase == "y":
+            make_purchase()
+        elif new_purchase == "n":
+            print(employee_summary)
+            ask_about_menu = (input("    Would you like to go to the main menu? (Y/N): ")).lower()
+            if ask_about_menu == "y":
+                print(menuDesign)
+                menu_options()
+            elif ask_about_menu == "n":
+                print("------------------------------------------------------------\n"
+                      "|   You are exiting the program. Bye!                      |\n"
+                      "------------------------------------------------------------")
+                sys.exit()
+            while ask_about_menu not in ["y", "n"]:
+                print("    Error! Please select either Y or N.")
+                ask_about_menu = (input("    Would you like to go to the main menu? (Y/N): ")).lower()
+
+        else:
+            while new_purchase not in ["y", "n"]:
+                print("    Error! Please select either Y or N.")
+                new_purchase = input("    Would you like to make a new purchase? (Y/N): ").lower()
+
+    else:
+        while confirm_purchase not in ["y", "n"]:
+            print("    Error! Please select either Y or N.")
+            confirm_purchase = input("    Would you like to confirm this purchase? (Y/N): ").lower()
 
 
 # Menu Selection Function
@@ -171,32 +271,11 @@ def menu_options():
             create_item()
         elif menu_selection == "3":
             make_purchase()
-        # NOT FUNCTIONING HOW I WANT
         elif menu_selection == "4":
-            if not employee_data:
-                print("    No employees in the system.")
-            else:
-                header = ("| Employee ID    | Employee Name   | Employee Type   | Years Worked    | Total Purchased "
-                          "| Total Discount  | Discount Number |")
-                print(header)
-                print("-" * len(header))  # Print a separator line
-
-                # Determine the maximum width for each column based on header length
-                max_lengths = [max(len(item.strip()) for item in column.split('|'))
-                               for column in header.split('|')[1:-1]]
-
-                for employee_information in employee_data:
-                    formatted_data = (f"| {employee_information[0]:<{max_lengths[0]}} "
-                                      f"| {employee_information[1]:<{max_lengths[1]}} "
-                                      f"| {employee_information[2]:<{max_lengths[2]}} "
-                                      f"| {employee_information[3]:<{max_lengths[3]}} "
-                                      f"| {employee_information[4]:<{max_lengths[4]}} "
-                                      f"| {employee_information[5]:<{max_lengths[5]}} "
-                                      f"| {employee_information[6]:<{max_lengths[6]}} |")
-                    print(formatted_data)
-
-
-
+            print("------------------------------------------------------------\n"
+                  "|   All employee summary.                                  |\n"
+                  "------------------------------------------------------------")
+            employee_summary()
         elif menu_selection == "5":
             print("------------------------------------------------------------\n"
                   "|   You are exiting the program. Bye!                      |\n"
